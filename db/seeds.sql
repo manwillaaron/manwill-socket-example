@@ -1,7 +1,8 @@
 create table admin (
 id serial PRIMARY key,
 email text,
-password text
+password text,
+name text
 );
 
 create table chatrooms (
@@ -18,5 +19,6 @@ create table messages (
 id serial PRIMARY key,
 chatroom_id int REFERENCES chatrooms(id),
 content text,
-sender_id int REFERENCES admin(id)
+sender_id int REFERENCES admin(id),
+name text
 );
