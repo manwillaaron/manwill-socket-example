@@ -13,12 +13,15 @@ module.exports = {
 
   async checkForChatroom(socket, io, body, db) {
     const { otherId, id } = body;
-    let chatroomId = await db.check_chatroom_id([+otherId, +id]);
-    if (!chatroomId[0]) {
-      let newChatroomId = await db.add_chatroom();
-      await db.add_to_chatjunc([+id, +newChatroomId[0].id]);
-      await db.add_to_chatjunc([+otherId, +newChatroomId[0].id]);
-      await db.add_message([+newChatroomId[0].id, "message me!", +id]);
+    console.log({body});
+    
+    let [chatroomId] = await db.check_chatroom_id([+otherId, +id]);
+    console.log(chatroomId);
+    if (!chatroomId) {
+      let [newChatroomId] = await db.add_chatroom();
+      await db.add_to_chatjunc([+id, +newChatroomId.id]);
+      await db.add_to_chatjunc([+otherId, +newChatroomId.id]);
+      await db.add_message([+newChatroomId.id, "message me!", +id]);
       socket.join(chatroomId);
       io.in(chatroomId).emit("login completed", {
         chatroomMessages: [],
@@ -26,12 +29,12 @@ module.exports = {
       });
     } else {
       let chatroomMessages = await db.get_chatroom_messages(
-        +chatroomId[0].chatroom_id
+        +chatroomId.chatroom_id
       );
-      socket.join(+chatroomId[0].chatroom_id);
-      io.in(+chatroomId[0].chatroom_id).emit("login completed", {
+      socket.join(+chatroomId.chatroom_id);
+      io.in(+chatroomId.chatroom_id).emit("login completed", {
         chatroomMessages,
-        chatroomId: +chatroomId[0].chatroom_id
+        chatroomId: +chatroomId.chatroom_id
       });
     }
   }

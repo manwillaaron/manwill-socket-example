@@ -16,12 +16,12 @@ function Login(props) {
     changes({ ...inputValues, [name]: value });
   }
 
-  useEffect(() => {
-    axios
-      .get("/api/admin")
-      .then(res => props.history.push("/"))
-      .catch(err => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/admin")
+  //     .then(res => props.history.push("/"))
+  //     .catch(err => console.log(err));
+  // }, []);
 
   function login() {
     axios

@@ -13,8 +13,9 @@ function Chat(props) {
   const [input, handleChange] = useState("");
   let [messages, updateMsgs] = useState([]);
   let [chatroomId, updateChatroomId] = useState(0);
-  const socket = io.connect("http://localhost:4000");
+  const socket = io.connect("http://localhost:3210");
 
+  console.log(props.match)
   useEffect(() => {
     if (props.match.params.id) {
       socket.emit("join", {
@@ -33,20 +34,18 @@ function Chat(props) {
     socket.on("incoming", body => {
       updateMsgs((messages = [body[0], ...messages]));
     });
-  });
+  },[]);
 
   function messageToServer() {
-    const {name, adminId } = props.location.state
+    const {senderName, sessionAdminId } = props.match.params
     socket.emit("message to server", {
-      senderId: adminId,
+      senderId: sessionAdminId,
       content: input,
       chatroomId,
-      senderName: name 
+      senderName 
     });
     handleChange("");
   }
-
-  console.log(props.location.state)
 
   return (
     <div className="chat-page">
@@ -70,6 +69,7 @@ function Chat(props) {
       <div className="messages-container">
         {messages.map(msg => (
           <div
+          key={msg.id}
             className={
               +msg.sender_id === +props.match.params.sessionAdminId
                 ? "message-card-sender"
@@ -83,7 +83,7 @@ function Chat(props) {
                   : "avatar-icon-receiver"
               }
             >
-              {msg.id}
+              {msg.sender_name}
             </Avatar>
             <Card
               className={

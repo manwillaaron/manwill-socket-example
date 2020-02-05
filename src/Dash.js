@@ -10,7 +10,7 @@ import Card from "@material-ui/core/Card";
 function Dash(props) {
   const [users, setUsers] = useState([]);
   const [sessionAdmin, setAdmin] = useState({});
-  const socket = io.connect("http://localhost:4000");
+  const socket = io.connect("http://localhost:3210");
 
   useEffect(() => {
     socket.emit("connection");
@@ -19,6 +19,7 @@ function Dash(props) {
   }, []);
 
   console.log({ sessionAdmin });
+  const {name, id} = sessionAdmin
   return (
     <div id="chats-container">
       {/* <Link to="/login">Login</Link> */}
@@ -37,7 +38,7 @@ function Dash(props) {
         >
           <Link
             to={{
-              pathname: `/chat/${user.id}`,
+              pathname: `/chat/${user.id}/${id}/${name}`,
               state: {
                 name: sessionAdmin.name,
                 adminId: sessionAdmin.id
