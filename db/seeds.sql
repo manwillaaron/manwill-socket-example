@@ -1,3 +1,8 @@
+drop table admin;
+drop table chatrooms;
+drop table chat_junc;
+drop table messages;
+
 create table admin (
 id serial PRIMARY key,
 email text,
