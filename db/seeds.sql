@@ -22,3 +22,10 @@ content text,
 sender_id int REFERENCES admin(id),
 name text
 );
+
+insert into admin (email, password, name)
+values  ('1','1','aaron'),
+('1','1','Jules'),
+('2','2','Carly'),
+('3','3','Behr'),
+('4','4','Ellsion');
